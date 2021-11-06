@@ -1,0 +1,40 @@
+ChangeLogID	Name	Type	Length	DeletedValue	InsertedValue
+1	ID	int	4	NULL	3
+1	test_int	int	4	NULL	1855730996
+1	test_bigint	bigint	8	NULL	1841118602
+1	test_smallint	smallint	2	NULL	17091
+1	test_tinyint	tinyint	1	NULL	6
+1	test_bit	bit	1	NULL	true
+1	test_date	date	3	NULL	2021-11-07
+1	test_datetime	datetime	8	NULL	2021-11-07 12:58:06.397
+1	test_datetime2	datetime2	8	NULL	2021-11-07 12:58:06.3966667
+1	test_time	time	5	NULL	00:58:06.3966667
+1	test_decimal	decimal	9	NULL	1074652099.8898
+1	test_numeric	decimal	9	NULL	1373522491.7978
+1	test_float	float	8	NULL	4.18184395170524E8
+1	test_guid	uniqueidentifier	16	NULL	6E5D835A-7A07-45D4-AE60-E2762B
+2	test_int	int	4	1056925035	1790540594
+2	test_bigint	bigint	8	529120576	1095631017
+2	test_smallint	smallint	2	21727	27741
+2	test_tinyint	tinyint	1	191	102
+2	test_datetime	datetime	8	2021-11-07 12:57:06.323	2021-11-07 01:23:41.740
+2	test_datetime2	datetime2	8	2021-11-07 12:57:06.3233333	2021-11-07 01:23:41.7400000
+2	test_time	time	5	00:57:06.3233333	01:23:41.7400000
+2	test_decimal	decimal	9	907693337.3836	1102997094.6076
+2	test_numeric	decimal	9	426734530.0773	516926114.1480
+2	test_float	float	8	9.19173831260644E8	1.90130215775612E9
+2	test_guid	uniqueidentifier	16	791F422E-43D7-497D-8012-EF2832	4AB646D1-E88E-418E-B742-7659A7
+3	ID	int	4	2	NULL
+3	test_int	int	4	1790540594	NULL
+3	test_bigint	bigint	8	1095631017	NULL
+3	test_smallint	smallint	2	27741	NULL
+3	test_tinyint	tinyint	1	102	NULL
+3	test_bit	bit	1	true	NULL
+3	test_date	date	3	2021-11-07	NULL
+3	test_datetime	datetime	8	2021-11-07 01:23:41.740	NULL
+3	test_datetime2	datetime2	8	2021-11-07 01:23:41.7400000	NULL
+3	test_time	time	5	01:23:41.7400000	NULL
+3	test_decimal	decimal	9	1102997094.6076	NULL
+3	test_numeric	decimal	9	516926114.1480	NULL
+3	test_float	float	8	1.90130215775612E9	NULL
+3	test_guid	uniqueidentifier	16	4AB646D1-E88E-418E-B742-7659A7	NULL
