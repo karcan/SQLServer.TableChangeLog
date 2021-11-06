@@ -1,0 +1,4 @@
+ID	SchemaName	ObjectName	ActionType	RowID	CreateDate	CreateUserID
+1	dbo	TestTable	Insert	1	2021-11-07 00:58:06.403	NULL
+2	dbo	TestTable	Update	1	2021-11-07 01:23:41.810	NULL
+3	dbo	TestTable	Delete	1	2021-11-07 01:31:05.200	NULL
