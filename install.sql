@@ -1,49 +1,51 @@
 CREATE TABLE dbo.TestTable
 (
-	ID				INT					IDENTITY(1,1)	PRIMARY KEY		NOT NULL,
-	test_int		INT					NULL,
-	test_bigint		BIGINT				NULL,
-	test_smallint	SMALLINT			NULL,
-	test_tinyint	TINYINT				NULL,
-	test_bit		BIT					NULL,
-	test_date		DATE				NULL,
-	test_datetime	DATETIME			NULL,
-	test_datetime2	DATETIME2(7)		NULL,
-	test_time		TIME(7)				NULL,
-	test_decimal	DECIMAL(18, 4)		NULL,
-	test_numeric	DECIMAL(18, 4)		NULL,
-	test_float		FLOAT				NULL,
+	ID			INT			IDENTITY(1,1)	PRIMARY KEY		NOT NULL,
+	test_int		INT			NULL,
+	test_bigint		BIGINT			NULL,
+	test_smallint		SMALLINT		NULL,
+	test_tinyint		TINYINT			NULL,
+	test_bit		BIT			NULL,
+	test_date		DATE			NULL,
+	test_datetime		DATETIME		NULL,
+	test_datetime2		DATETIME2(7)		NULL,
+	test_time		TIME(7)			NULL,
+	test_decimal		DECIMAL(18, 4)		NULL,
+	test_numeric		DECIMAL(18, 4)		NULL,
+	test_float		FLOAT			NULL,
 	test_guid		UNIQUEIDENTIFIER	NULL
 )
+
 GO
 CREATE TABLE [dbo].[ChangeLog]
 (
-	[ID]			BIGINT IDENTITY(1,1) NOT NULL,
-	[SchemaName]	NVARCHAR(128) NULL,
-	[ObjectName]	NVARCHAR(128) NULL,
-	[ActionType]	VARCHAR(6) NULL,
-	[RowID]			BIGINT NULL,
-	[CreateDate]	DATETIME NULL,
-	[CreateUserID]	SMALLINT NULL, 
-    CONSTRAINT [PK_ChangeLog] PRIMARY KEY ([ID]),
-)
+	[ID]		BIGINT 		IDENTITY(1,1)	NOT NULL,
+	[SchemaName]	NVARCHAR(128)	NULL,
+	[ObjectName]	NVARCHAR(128) 	NULL,
+	[ActionType]	VARCHAR(6) 	NULL,
+	[RowID]		BIGINT 		NULL,
+	[CreateDate]	DATETIME 	NULL,
+	[CreateUserID]	SMALLINT 	NULL
+	
+	CONSTRAINT [PK_ChangeLog] PRIMARY KEY ([ID])
+);
 
 GO
 CREATE TABLE [dbo].[ChangeLogRawData]
 (
-	[ChangeLogID]	BIGINT NULL,
+	[ChangeLogID]		BIGINT NULL,
 	[Name]			NVARCHAR(128) NULL,
 	[Type]			NVARCHAR(128) NULL,
 	[Length]		SMALLINT NULL,
-	[DeletedValue]	NVARCHAR(MAX),
-	[InsertedValue]	NVARCHAR(MAX)
-)
+	[DeletedValue]		NVARCHAR(MAX),
+	[InsertedValue]		NVARCHAR(MAX)
+);
 
 GO
 CREATE FUNCTION [dbo].[FN_DynamicColumnConvertSQL]
 (
 	@pColumn		VARCHAR(128),
-	@pColumnType	TINYINT
+	@pColumnType		TINYINT
 )
 RETURNS NVARCHAR(MAX)
 AS
@@ -86,19 +88,20 @@ BEGIN
 	SET @vResult = 'CAST(' + @vResult + ' AS VARCHAR) AS ' + @pColumn
 	RETURN @vResult
 END
+
 GO
-CREATE PROCEDURE [dbo].[SP_TableTriggerChangeLogInsert]			@pObjectID		INT,
-																@pObjectName	VARCHAR(128),
-																@pSchemaID		INT,
-																@pSchemaName	VARCHAR(128),
-																@pID			NVARCHAR(MAX),
-																@pActionType	TINYINT
+CREATE PROCEDURE [dbo].[SP_TableTriggerChangeLogInsert]			@pObjectID	INT,
+									@pObjectName	VARCHAR(128),
+									@pSchemaID	INT,
+									@pSchemaName	VARCHAR(128),
+									@pID		NVARCHAR(MAX),
+									@pActionType	TINYINT
 AS
 BEGIN
 
 	SET NOCOUNT ON;
 
-	DECLARE	@vSQL			NVARCHAR(MAX),
+	DECLARE		@vSQL			NVARCHAR(MAX),
 			@vData			NVARCHAR(MAX),
 			@vRow			NVARCHAR(MAX),
 			@vChanges		NVARCHAR(MAX)
@@ -106,18 +109,18 @@ BEGIN
 	DECLARE @vColumnChanges TABLE (
 				_IDName		NVARCHAR(128),
 				_IDValue	NVARCHAR(16),
-				ColumnID INT, 
-				ColumnName VARCHAR(128), 
-				TypeID TINYINT, 
-				TypeName VARCHAR(128), 
-				Length SMALLINT, 
-				DeletedValue NVARCHAR(MAX), 
-				InsertedValue NVARCHAR(MAX)
+				ColumnID 	INT, 
+				ColumnName 	VARCHAR(128), 
+				TypeID 		TINYINT, 
+				TypeName	VARCHAR(128), 
+				Length 		SMALLINT, 
+				DeletedValue 	NVARCHAR(MAX), 
+				InsertedValue 	NVARCHAR(MAX)
 			);
 
 	DECLARE @vChangeLog TABLE (
 		ID		BIGINT,
-		RowID	BIGINT
+		RowID		BIGINT
 	)
 
 	-- Get Columns with Changes
@@ -214,7 +217,7 @@ BEGIN
 			ActionType		= CASE @pActionType WHEN 1 THEN 'Update' WHEN 2 THEN 'Insert' WHEN 3 THEN 'Delete' END,
 			RowID			= _IDValue, 
 			CreateDate		= GETDATE(), 
-			CreateUserID	= NULL
+			CreateUserID		= NULL
 		FROM 
 			@vColumnChanges AS vc
 		WHERE
@@ -232,8 +235,8 @@ BEGIN
 			,Name			= vc.ColumnName
 			,Type			= vc.TypeName
 			,Length			= vc.Length
-			,DeletedValue	= vc.DeletedValue
-			,InsertedValue	= vc.InsertedValue
+			,DeletedValue		= vc.DeletedValue
+			,InsertedValue		= vc.InsertedValue
 		FROM
 			@vColumnChanges AS vc
 			INNER JOIN @vChangeLog AS vl ON vl.RowID = vc._IDValue
@@ -245,18 +248,19 @@ BEGIN
 	END
 END
 
+GO
 CREATE TRIGGER [dbo].[TR_TestTable_Log]
 ON [dbo].[TestTable]
 AFTER INSERT,UPDATE,DELETE
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE	@pActionType	SMALLINT,
-			@vObjectID		INT,
+	DECLARE		@pActionType	SMALLINT,
+			@vObjectID	INT,
 			@vObjectName	NVARCHAR(128),
-			@vSchemaID		INT,
+			@vSchemaID	INT,
 			@vSchemaName	NVARCHAR(128),
-			@vID			NVARCHAR(128) = 'ID'
+			@vID		NVARCHAR(128) = 'ID'
 
 	-- Get action type ex: 
 	BEGIN
@@ -284,9 +288,9 @@ BEGIN
 	-- Get Object Detail
 	BEGIN
 		SELECT
-			@vObjectID		= parent_id,
+			@vObjectID	= parent_id,
 			@vObjectName	= stbl.name,
-			@vSchemaID		= ssch.schema_id,
+			@vSchemaID	= ssch.schema_id,
 			@vSchemaName	= ssch.name
 		FROM
 			sys.triggers AS strg
@@ -325,11 +329,11 @@ BEGIN
 	SELECT *, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) AS _Order INTO #vInserted FROM INSERTED
 	SELECT *, ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) AS _Order INTO #vDeleted FROM DELETED
 	
-	EXEC [dbo].[SP_TableTriggerChangeLogInsert]		@pObjectID		= @vObjectID,
-															@pObjectName	= @vObjectName,
-															@pSchemaID		= @vSchemaID,
-															@pSchemaName	= @vSchemaName,
-															@pID			= @vID,
-															@pActionType	= @pActionType
+	EXEC [dbo].[SP_TableTriggerChangeLogInsert]		@pObjectID	= @vObjectID,
+								@pObjectName	= @vObjectName,
+								@pSchemaID	= @vSchemaID,
+								@pSchemaName	= @vSchemaName,
+								@pID		= @vID,
+								@pActionType	= @pActionType
 END
 GO
